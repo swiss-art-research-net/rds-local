@@ -35,7 +35,7 @@ The current implementation of the Reconciliation API only includes a reconciliat
 And response is a list of reconciliation candidates described in the documentation:
 For multiple queries, the response is a JSON literal object with the same keys as in the request
 
-```json
+```
 {
     "q0" : {
       "result" : { ... }
@@ -50,7 +50,7 @@ For multiple queries, the response is a JSON literal object with the same keys a
 
 Each result consists of a JSON literal object with the structure
 
-```json
+```
 {
     "result" : [
       {
