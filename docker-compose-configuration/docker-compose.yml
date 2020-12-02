@@ -1,0 +1,51 @@
+version: "2.2"
+services:
+  platform:
+    ports:
+      - "10214:8080"
+    depends_on:
+      - blazegraph
+    container_name: "${COMPOSE_PROJECT_NAME}-metaphacts-platform"
+    image: "${PLATFORM_IMAGE}"
+    restart: unless-stopped
+    mem_limit: 1g
+    mem_reservation: 1g
+    environment:
+      - PLATFORM_OPTS=-Dconfig.environment.sparqlEndpoint=http://${COMPOSE_PROJECT_NAME}-blazegraph:8080/blazegraph/sparql ${PLATFORM_OPTS}
+      - JAVA_OPTS=
+      - GENERATE_PLATFORM_PASSWORD=${GENERATE_PLATFORM_PASSWORD}
+    networks:
+      - default
+      - platform_network
+    volumes:
+      - platform-runtime-data:/runtime-data
+      - platform-apps:/apps
+    logging:
+      driver: json-file
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  blazegraph:
+    container_name: "${COMPOSE_PROJECT_NAME}-blazegraph"
+    image: "${BLAZEGRAPH_IMAGE}"
+    restart: unless-stopped
+    volumes:
+      - blazegraph-data:/blazegraph-data
+    environment:
+      - JAVA_OPTS=-Xmx1g
+    networks:
+      - platform_network
+    logging:
+      driver: json-file
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+volumes:
+  platform-runtime-data:
+  platform-apps:
+  blazegraph-data:
+
+networks:
+  platform_network:
