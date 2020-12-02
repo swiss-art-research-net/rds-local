@@ -102,3 +102,9 @@ curl --location --request POST 'https://rds-mph.swissartresearch.net/rest/reconc
 ```bash
 curl --location --request POST 'https://rds-mph.swissartresearch.net/rest/reconciliation' --header 'Content-Type: application/json' --header 'Accept: application/json' --data-urlencode 'queries={"q2":{"query":"Car","limit":3},"q3":{"query":"Home","limit":3},"q0":{"query":"Meinheim","limit":3}}'
 ```
+
+## How to start you own RDS-Local instance
+First of all you should ensure that [docker](https://www.docker.com) and [docker-compose](https://docs.docker.com/compose/install/) are installed on your computer. Once this step is done, you can move to the second one.
+Navigate to `./docker-compose-configuration` folder and execute the following command: `docker-compose up -d`. This command will start the platform in a few minutes, and then you can access the platform using the following url: [http://localhost:10214](http://localhost:10214) (login with user admin and password admin).
+
+You can execute `docker-compose down` command to stop the platform. `docker-compose logs -f` will provide logs if it's needed. 

@@ -1,0 +1,3 @@
+/docker-compose-configuration/rds-local-blazegraph-journal/*
+/docker-compose-configuration/rds-local-runtime/*
+*.DS_Store
