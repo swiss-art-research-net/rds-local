@@ -1,0 +1,199 @@
+<style>
+  .ontodia-advanced-tabs {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ontodia-advanced-tabs > .tab-content {
+    flex: 1 1 auto;
+    display: flex;
+  }
+
+  .ontodia-advanced-tabs > .nav-tabs {
+    flex: 0 0 auto;
+  }
+
+  .ontodia-advanced-tabs .tab-content > div {
+    flex: 1 1 auto;
+    padding: 0;
+  }
+
+  .ontodia-advanced-tabs > .tab-content > .active {
+    display: flex;
+  }
+</style>
+
+<style>
+  .ontodia-container {
+    flex: auto;
+    display: flex;
+    height: 100%;
+    width: 100%;
+  }
+
+  .ontodia-workspace-container {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .ontodia-knowledge-panel-container {
+    background-color: whitesmoke;
+    padding: 10px 10px 0px 0px;
+    max-width: 30%;
+  }
+
+  .ontodia-knowledge-panel-container .knowledge-panel-frame {
+    box-shadow: 0px 5px 13px 5px rgba(0, 0, 0, 0.12);
+    height: calc(100% - 10px);
+    transition: height 0.3s;
+    overflow: hidden;
+    margin-left: 0;
+    width: 380px;
+    max-width: 100%;
+  }
+
+  .knowledge-panel-frame .DataTable--global-filter-container {
+    width: 100%
+  }
+</style>
+
+<mp-event-proxy
+  id='proxy-selection'
+  on-event-type='Ontodia.ShowElementInfo'
+  proxy-event-type='KnowledgePanel.Open'
+  proxy-targets='[]'>
+</mp-event-proxy>
+
+<div class='ontodia-container'>
+  <div class='ontodia-workspace-container'>
+    <mp-workspace-layout>
+      <mp-workspace-row>
+        <mp-workspace-item default-size=275 id='tabs-item'>
+          <bs-tabs id="tabs"
+          [[#if focusView]]
+            default-active-key="contents"
+          [[else]][[#if focusCreate]]
+            default-active-key="database"
+          [[else]]
+            default-active-key="contents"
+          [[/if]] [[/if]]
+  
+             class='ontodia-advanced-tabs'
+           >
+            <bs-tab event-key="contents" title='Contents'>
+              <ontodia-element-search></ontodia-element-search>
+            </bs-tab>
+            <bs-tab event-key="database" title='[[#if databaseTabTitle]][[databaseTabTitle]][[else]]Database[[/if]]'>
+              <mp-workspace-layout>
+                <mp-workspace-column undocked=true>
+                  <mp-workspace-item heading="Classes" id="classes">
+                    <ontodia-class-tree></ontodia-class-tree>
+                  </mp-workspace-item>
+                  <mp-workspace-item heading="Instances" id="instances">
+                    <ontodia-instances-search></ontodia-instances-search>
+                  </mp-workspace-item>
+                </mp-workspace-column>
+              </mp-workspace-layout>
+            </bs-tab>
+          </bs-tabs>
+        </mp-workspace-item>
+        <mp-workspace-item id='paper' undocked=true>
+          <ontodia-canvas use-knowledge-panel=true [[> OntodiaCanvasTemplatesDeclaration]]>
+            [[> OntodiaCanvasTemplates ]]
+            <ontodia-toolbar dock="sw">
+              [[#if readonly]][[else]]
+              <div class='btn-group btn-group-sm' style='margin-right: 10px;'>
+                <ontodia-save-button dropup=true></ontodia-save-button>
+              </div>
+              [[/if]]
+
+              [[!-- todo-oss: no undo-redo in OSS --]]
+              <div class='btn-group btn-group-sm' style='margin-right: 10px;'>
+                <button name='undo' class='btn btn-secondary'><i class='fa fa-undo'></i></button>
+                <button name='redo' class='btn btn-secondary'><i class='fa fa-repeat'></i></button>
+              </div>
+
+              <div class='btn-group btn-group-sm' style='margin-right: 10px;'>
+                <button name='zoomIn' class='btn btn-secondary' title='Zoom in'><i class='fa fa-search-plus'></i></button>
+                <button name='zoomOut' class='btn btn-secondary' title='Zoom out'><i class='fa fa-search-minus'></i></button>
+                <button name='zoomToFit' class='btn btn-secondary' title='Fit to screen'><i class='fa fa-arrows-alt'></i></button>
+              </div>
+
+              <div class='btn-group btn-group-sm' style='margin-right: 10px;'>
+                <button name='clearAll' class='btn btn-secondary'><i class='fa fa-trash'></i> Clear All</button>
+                [[!-- todo-oss: no relationship finder in OSS --]]
+                <button name='findRelationship' class='btn btn-secondary'><span className='ontodia-path-finder-icon' aria-hidden='true' title='Find path'></span></button>
+              </div>
+
+              [[> layoutButton]]
+
+              <div class='btn-group btn-group-sm' style='margin-right: 10px;'>
+                <bs-dropdown bs-size='sm' dropup="true">
+                  <bs-dropdown-toggle>Export</bs-dropdown-toggle>
+                  <bs-dropdown-menu>
+                    <bs-menu-item name='exportPng'><i class='fa fa-picture-o'></i> Export PNG</bs-menu-item>
+                    <bs-menu-item name='exportSvg'><i class='fa fa-picture-o'></i> Export SVG</bs-menu-item>
+                    <bs-menu-item name='print'><i class='fa fa-print'></i> Print</bs-menu-item>
+                    [[!-- todo-oss: no rdf export in OSS --]]
+                    <bs-menu-item name='exportRdf'><i class='fa fa-file-text'></i> RDF</bs-menu-item>
+                  </bs-dropdown-menu>
+                </bs-dropdown>
+              </div>
+
+              </ontodia-toolbar>
+              <ontodia-halo></ontodia-halo>
+              <ontodia-halo-link></ontodia-halo-link>
+            <ontodia-navigator></ontodia-navigator>
+            [[!-- todo-oss: no snaplines-selection in OSS --]]
+            <ontodia-snaplines></ontodia-snaplines>
+            <ontodia-selection></ontodia-selection>
+          </ontodia-canvas>
+        </mp-workspace-item>
+      </mp-workspace-row>
+    </mp-workspace-layout>
+  </div>
+  <div class='ontodia-knowledge-panel-container'>
+    <semantic-context repository='[[#if (urlParam "repository")]][[urlParam "repository"]][[else]]default[[/if]]'>
+      <mp-knowledge-panel-frame no-pin=true></mp-knowledge-panel-frame>
+    </semantic-context>
+  </div>
+</div>
+
+[[#*inline "layoutButton"]]
+<div class='btn-group btn-group-sm' style='margin-right: 10px;'>
+  <bs-dropdown bs-size='sm' dropup="true">
+    [[#if owlLayoutAsMain]]
+    <button name='owlHorizontalLayout' class='btn btn-secondary'>
+      <i class='fa fa-sitemap' style='transform: rotate(270deg);'></i> OWL Horizontal layout
+    </button>
+    [[else]]
+      [[#if skosLayoutAsMain]]
+        <button name='skosHorizontalLayout' class='btn btn-secondary'>
+          <i class='fa fa-sitemap' style='transform: rotate(270deg);'></i> Skos Horizontal layout
+        </button>
+      [[else]]
+        <button name='forceLayout' class='btn btn-secondary'>
+          <i class='fa fa-snowflake-o'></i> Force layout
+        </button>
+      [[/if]]
+    [[/if]]
+    <bs-dropdown-toggle></bs-dropdown-toggle>
+    <bs-dropdown-menu>
+      [[#if owlLayoutAsMain]]
+        <bs-menu-item name='owlHorizontalLayout'><i class='fa fa-sitemap' style='transform: rotate(270deg);'></i> OWL Horizontal layout</bs-menu-item>
+        <bs-menu-item name='owlVerticalLayout'><i class='fa fa-sitemap'></i> OWL Vertical layout</bs-menu-item>
+      [[/if]]
+      [[#if skosLayoutAsMain]]
+        <bs-menu-item name='skosHorizontalLayout'><i class='fa fa-sitemap' style='transform: rotate(270deg);'></i> Skos Horizontal layout</bs-menu-item>
+        <bs-menu-item name='skosVerticalLayout'><i class='fa fa-sitemap'></i> Skos Vertical layout</bs-menu-item>
+      [[/if]]
+      <bs-menu-item name='forceLayout'><i class='fa fa-snowflake-o'></i> Force layout</bs-menu-item>
+      <bs-menu-item name='flowLayout'><i class='fa fa-sitemap'></i> Flow layout</bs-menu-item>
+      <bs-menu-item name='sankeyLayout'><i class='fa fa-sitemap' style='transform: rotate(90deg);'></i> Sankey layout</bs-menu-item>
+      <bs-menu-item name='gridLayout'><i class='fa fa-th'></i> Grid layout</bs-menu-item>
+      <bs-menu-item name='autoLayout'><i class='fa fa-magic'></i> Auto layout</bs-menu-item>
+    </bs-dropdown-menu>
+  </bs-dropdown>
+</div>
+[[/inline]]

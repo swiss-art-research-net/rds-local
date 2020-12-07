@@ -1,0 +1,49 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sparql: <http://www.openrdf.org/config/repository/sparql#> .
+@prefix lookup: <http://www.metaphacts.com/ontologies/platform/repository/lookup#> .
+@prefix rep: <http://www.openrdf.org/config/repository#> .
+@prefix sail: <http://www.openrdf.org/config/sail#> .
+@prefix sr: <http://www.openrdf.org/config/repository/sail#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix mph: <http://www.metaphacts.com/ontologies/platform/repository#> .
+@prefix ephedra: <http://www.metaphacts.com/ontologies/platform/ephedra#> .
+@prefix fedsail: <http://www.openrdf.org/config/sail/federation#> .
+
+[] a rep:Repository;
+  rep:repositoryID "default-lookup";
+  rdfs:label "Default HTTP SPARQL Repository";
+  rep:repositoryImpl [
+      rep:repositoryType "metaphactory:SPARQLRepository";
+      sparql:query-endpoint <http://rds-local-blazegraph:8080/blazegraph/sparql>;
+      mph:quadMode true
+    ];
+  lookup:configuration [
+      lookup:type "metaphacts:sparqlLookup";
+      lookup:datasetQuery """
+        SELECT DISTINCT ?candidate ?dataset ?datasetLabel WHERE {
+          GRAPH ?dataset {
+            ?candidate ?p ?o .
+          }
+          OPTIONAL { ?dataset rdfs:label ?datasetLabel . }
+        }
+      """;
+      lookup:searchBlockTemplate """
+        ?candidate a ?type.
+        ?candidate ?keyProp ?key.
+        FILTER ISLITERAL(?key)
+        SERVICE <http://www.bigdata.com/rdf/search#search> {
+             ?key <http://www.bigdata.com/rdf/search#search> ?__token__;
+             <http://www.bigdata.com/rdf/search#relevance> ?score_private ;
+             <http://www.bigdata.com/rdf/search#minRelevance> \"0.1\";
+             <http://www.bigdata.com/rdf/search#matchAllTerms> \"true\".
+        }
+      """;
+    lookup:typeBlockTemplate """
+      FILTER EXISTS {
+        GRAPH <http://schema.swissartresearch.net/rds/type-mapping> {
+          ?targetType rdfs:subClassOf? ?__type__.
+        }
+        ?candidate a ?targetType.
+      }
+    """
+    ].

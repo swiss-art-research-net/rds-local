@@ -1,0 +1,581 @@
+<ol class="page-breadcrumb">
+  <li>
+    <semantic-link title="Help" uri="http://help.metaphacts.com/resource/Start">Help</semantic-link>
+  </li>
+
+  <li class="active">Query Service</li>
+</ol>
+
+<div class="page">
+  <div class='page__body'>
+    <h1>Query Service</h1>
+    <p>
+      This service provides a uniform <b>program</b> interface for querying data from the storage. It's meant to be a special layer
+      through which all queries are came. Current implementation supports two types of queries: <code>SparqlQuery</code> and <code>LookupQuery</code>.
+    </p>
+    <p>
+      The only requirement for queries is to have the <b>type</b> field which specifies the type of query.
+    </p>
+    <p>
+      Together with query which usually is described by user to the QueryService we also provide a set of arguments to parametrize the query. In this map for each input variable from the query should be a corresponding value (Literal or Iri).
+      In response to each call of service for data, no matter what type of query is, QueryService returns array of bindings.
+    </p>
+    <p>
+      Interface of the service from program point of view has three functions to call:
+      <ul>
+        <li>
+          <code>fetchData(query, args, context)</code> - Main function of this interface which provides ability to execute queries and return bindings. <code>query</code> - LookupQuery or SparqlQuery. <code>args</code> - set of arguments to parametrize the query. <code>context (optional)</code> - query context which defines a target repository etc.
+        </li>
+        <li>
+          <code>validateQuery(query, outputVariables)</code> - Function to validate queries returns a Error if the query is incorrectly defined and "undefined" if everything is valid. <code>query</code> - LookupQuery or SparqlQuery. <code>outputVariables</code> - The list of identifiers of variables which are expected to have in the result bindings set.
+        </li>
+        <li>
+          <code>createClientQuery(sparqlQuery, defaultParameters)</code> - Creates query from a sparql string - this method is meant only for backward compatibility.  <code>sparqlQuery</code> - string sparql query. <code>defaultParameters</code> - Default dictionary of parameters (see SparqlQuery below).
+        </li>
+      </ul>
+      <mp-code-block mode='text/typescript'>
+        <![CDATA[
+        class QueryClient {
+          fetchData(
+            query: Query,
+            args: { [arg: string]: Rdf.Node },
+            context?: QueryContext
+          ): Kefir.Property<SparqlClient.Bindings>;
+
+          validateQuery(
+            query: Query,
+            outputVariables: string[]
+          ): Error | undefined;
+
+          createClientQuery(
+            sparqlQuery: string,
+            defaultParameters?: { [variable: string]: SparqlQueryClient.SparqlParam }
+          ): Query;
+        }
+        ]]>
+      </mp-code-block>
+    </p>
+
+    <h2>Sparql query</h2>
+    Queries of this types are processed using SparqlClient the same way as ordinary SPARQL queries. The difference is that this query also has a list of parameters which introduce a list of restrictions on the parameterization process. I.e. before the execution QueryService checks whether the parameters match arguments. The output variable are also validated.
+    <p>
+      <mp-code-block mode='text/typescript'>
+        <![CDATA[
+        {
+          type: 'sparql';
+          query: string;
+          params?: { [variable: string]: SparqlParam };
+        }
+        ]]>
+      </mp-code-block>
+      Where:
+      <ul>
+        <li><code>type</code> - type of the query. Should be always "<b>sparql</b>" in order to be of a type SparqlQuery;</li>
+        <li><code>query</code> - SPARQL <b>SELECT</b> query;</li>
+        <li><code>params (optional)</code> - dictionary of input parameters where for each defined input variable there is a corresponding definition. The definition can be one of two types <code>TokenSparqlParam</code> or <code>BindSparqlParam</code>.</li>
+      </ul>
+      <h3>TokenSparqlParam</h3>
+      Defines a token input parameters and tells whether it should be escaped and tokenized or not. Also here it's possible to specify if the parameter is optional or not. It's expected that token alway of <code>Literal^^xsd:string</code> type.
+      <mp-code-block mode='text/typescript'>
+        <![CDATA[
+        {
+          type: 'token';
+          required?: boolean;
+          escapeLuceneSyntax?: boolean;
+          tokenizeLuceneQuery?: boolean;
+        }
+        ]]>
+      </mp-code-block>
+      <h3>BindSparqlParam</h3>
+      Defines a binding input parameters, tells if the parameter is optional or not and what datatype the parameter should have.
+      <mp-code-block mode='text/typescript'>
+        <![CDATA[
+        {
+          type: 'bind';
+          required?: boolean;
+          datatype?: string;
+        }
+        ]]>
+      </mp-code-block>
+    </p>
+
+    <h2>Lookup query</h2>
+    <p>
+      Queries of this type are processed using <semantic-link title="Reconciliation Service" iri='[[resolvePrefix "Help:ReconciliationApi"]]'>Reconciliation Service</semantic-link>. Query should be of the following format
+      <mp-code-block mode='text/typescript'>
+        <![CDATA[
+        {
+          type: 'lookup';
+          defaultTerm?: string;
+          limit?: number;
+          entityType?: string;
+        }
+        ]]>
+      </mp-code-block>
+      Where:
+      <ul>
+        <li><code>type</code> - type of the query. Should be always "<b>lookup</b>" in order to be of a type LookupQuery;</li>
+        <li><code>defaultTerm (optional)</code> - provides a default query term for the case when keyword is not provided via arguments;</li>
+        <li><code>limit (optional)</code> - tells for how much results we are looking for;</li>
+        <li><code>entityType (optional)</code> - entity types (see <semantic-link title="Reconciliation Service" iri='[[resolvePrefix "Help:ReconciliationApi"]]'>documentation for ReconciliationApi</semantic-link>).</li>
+      </ul>
+    </p>
+    <p>
+      One of limitations is that for lookup query is that the keyword in the arguments for the search should be passed via <code>__token__</code> variable and should be an rdf-literal, the other parameters passed through the arguments are ignored.
+    </p>
+    <p>
+      It's strictly defined which set of variables will have a response bindings set. I.e. in response to LookupQuery you will alway have following variables in bindings:
+      <ul>
+        <li><code>subject: Rdf.Iri</code> - the IRI of the entity which we are looking for. In terms of reconciliation API it is an ID of reconciliation candidate;</li>
+        <li><code>label: Rdf.Literal(^^xsd:string)</code> - Literal label of the entity we are looking for;</li>
+        <li><code>type: (optional) Rdf.Iri</code> - IRI of the type of the entity we are looking for;</li>
+        <li><code>typeLabel: (optional) Rdf.Literal(^^xsd:string)</code> - name of the type of the entity we are looking for;</li>
+        <li><code>score: Rdf.Literal(^^xsd:number)</code> - see <semantic-link title="Reconciliation Service" iri='[[resolvePrefix "Help:ReconciliationApi"]]'>documentation for ReconciliationApi</semantic-link>;</li>
+        <li><code>match: Rdf.Literal(^^xsd:boolean)</code> - see <semantic-link title="Reconciliation Service" iri='[[resolvePrefix "Help:ReconciliationApi"]]'>documentation for ReconciliationApi</semantic-link>.</li>
+      </ul>
+    </p>
+
+    <h2>Components to support QueryService</h2>
+    Currently QueryService are adopted for three components: <code>semantic-form-autocomplete-input (in semantic-form)</code>, <code>semantic-simple-search</code> and <code>resource-selector (structured search)</code>.
+
+    <h3>Semantic-form-autocomplete-input</h3>
+    The configuration to use this component with QueryService is presented below. Before using with LookupQuery make sure you configured <code>value-binding-name</code> to <code>subject</code>.
+    <mp-code-block mode='text/typescript'>
+      <![CDATA[
+      <semantic-form-autocomplete-input for='person'
+        value-binding-name="subject"
+        lookup-query='{
+          "type": "lookup",
+          "defaultTerm": "Johns",
+          "entityType": "http://www.wikidata.org/entity/Q5",
+          "limit": 5
+        }'
+      ></semantic-form-autocomplete-input>
+      ]]>
+    </mp-code-block>
+
+    <h3><code>semantic-form-autocomplete-input</code></h3>
+    Note: before using LookupQuery make sure you configured <code>value-binding-name</code> to <code>subject</code>.
+    <mp-code-block mode='text/typescript'>
+      <![CDATA[
+      <semantic-form-autocomplete-input
+        for='person'
+        value-binding-name="subject"
+        lookup-query='{
+          "type": "lookup",
+          "defaultTerm": "Johns",
+          "entityType": "http://www.wikidata.org/entity/Q5",
+          "limit": 5
+        }'
+      ></semantic-form-autocomplete-input>
+      ]]>
+    </mp-code-block>
+
+    <h3><code>semantic-simple-search</code></h3>
+    Note: before using LookupQuery make sure you configured <code>resource-binding-name</code> to <code>subject</code>. The example below is meant to be used with wikidata.
+    <mp-code-block>
+      <![CDATA[
+      <semantic-simple-search
+        query='{
+          "type": "sparql",
+          "query": "PREFIX wd: <http://www.wikidata.org/entity/>
+            PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+            SELECT ?resource ?label WHERE {
+              SERVICE <http://www.metaphacts.com/ontologies/platform/repository/federation#wikidata-text>  {
+                ?resource <http://www.metaphacts.com/ontology/hasWikidataSearchToken> ?__token__ .
+              }
+              ?resource wdt:P31 wd:Q5
+            } LIMIT 5",
+          "params": {
+              "__token__": {
+              "type": "token",
+              "required": true,
+              "escapeLuceneSyntax": true,
+              "tokenizeLuceneQuery": true
+            }
+          }
+        }'
+        template='<span style="color: blue;" title="{{resource.value}}">{{label.value}}</span>'
+        input-placeholder='Search for something e.g. "Albert Einstein"'
+      ></semantic-simple-search>
+      ]]>
+    </mp-code-block>
+
+
+    <h3><code>resource-selector (structured search)</code></h3>
+    Note: before using LookupQuery make sure you configured <code>suggestionVariable</code> to <code>subject</code> for target relation. The example below is meant to be used with wikidata.
+    <mp-code-block>
+      <![CDATA[
+      <semantic-search-query-builder resource-selector-relations='{
+          "<http://xmlns.com/foaf/0.1/topic_interest>": {
+              "query": {
+                  "type": "lookup",
+                  "term": "__token__",
+                  "entityType": "http://www.wikidata.org/entity/Q838948",
+                  "limit": 3
+              },
+              "suggestionVariable": "subject",
+              "suggestionTupleTemplate": "<span style=\"color: blue;\" title=\"{{resource.value}}\">{{label.value}}. Score: ({{score.value}})</span>"
+          }
+      }'>
+      </semantic-search-query-builder>
+      ]]>
+    </mp-code-block>
+
+    <h2>Examples</h2>
+    To make examples work please perform following query to ensure your storage have all necessary for examples data:
+    <mp-code-block mode='application/sparql-query'>
+      <![CDATA[
+      INSERT {
+        <http://www.wikidata.org/entity/Q937> <http://www.w3.org/2004/02/skos/core#altLabel> "Albert Einstein".
+        <http://www.wikidata.org/entity/Q937> <http://www.wikidata.org/prop/direct/P31> <http://www.wikidata.org/entity/Q5> .
+        <http://www.wikidata.org/entity/Q937> a <http://www.wikidata.org/entity/Q5> .
+        <http://www.wikidata.org/entity/Q937> <http://www.wikidata.org/prop/direct/P19> <http://www.wikidata.org/entity/Q3012> .
+
+        <http://www.wikidata.org/entity/Q3012> <http://www.wikidata.org/prop/direct/P31> <http://www.wikidata.org/entity/Q515>.
+        <http://www.wikidata.org/entity/Q3012> a <http://www.wikidata.org/entity/Q515>.
+        <http://www.wikidata.org/entity/Q3012> <http://www.w3.org/2004/02/skos/core#altLabel> "Ulm Donau".
+
+        <http://www.wikidata.org/entity/Q3012> <http://www.wikidata.org/prop/direct/P31> <http://www.wikidata.org/entity/Q838948> .
+        <http://www.wikidata.org/entity/Q3012> a <http://www.wikidata.org/entity/Q838948> .
+        <http://www.wikidata.org/entity/Q3012> <http://www.w3.org/2004/02/skos/core#altLabel> "Mona Lisa".
+
+        <http://example.org/bob#me> <http://xmlns.com/foaf/0.1/topic_interest> <http://www.wikidata.org/entity/Q3012>
+      } WHERE { }
+      ]]>
+    </mp-code-block>
+
+    <h3>Semantic-form-autocomplete-input</h3>
+    <mp-code-example>
+    <![CDATA[
+    <semantic-form new-subject-template='http://www.example.com/dictionary/id/{{UUID}}'
+        post-action='redirect'
+        browser-persistence=true
+        form-id='example-1'
+        fields='[
+          {
+            "id": "place",
+            "label": "Place of birth",
+            "xsdDatatype": "xsd:anyURI",
+            "minOccurs": "0",
+            "selectPattern": "SELECT $value WHERE { $subject <http://example.com/hasPlaceOfBirth> $value }",
+            "insertPattern": "INSERT { $subject <http://example.com/hasPlaceOfBirth> $value } WHERE {}",
+            "deletePattern": "DELETE { $subject <http://example.com/hasPlaceOfBirth> $value } WHERE {}"
+          },
+          {
+            "id": "person",
+            "label": "Person",
+            "description": "Who compiled this dictionary",
+            "xsdDatatype": "xsd:anyURI",
+            "minOccurs": "1",
+            "selectPattern": "SELECT $value WHERE {
+                $subject <http://example.com/isAbout> $value .
+              }",
+            "insertPattern": "INSERT {
+                $subject <http://example.com/isAbout> $value .
+              } WHERE {}",
+            "deletePattern": "DELETE {
+                $subject <http://example.com/isAbout> $value .
+              } WHERE {}"
+          }
+        ]'>
+      <bs-panel>
+        <h4>Create a new record about Person</h4>
+        <semantic-form-recover-notification></semantic-form-recover-notification>
+        <bs-alert>
+          <b>Person</b> is a <code>wd:Q5</code> entity. Type "Albert Einstein" to test this field.
+        </bs-alert>
+        <semantic-form-autocomplete-input for='person'
+          value-binding-name="subject"
+          lookup-query='{
+            "type": "lookup",
+            "defaultTerm": "Johns",
+            "entityType": "http://www.wikidata.org/entity/Q5",
+            "limit": 5
+          }'
+        ></semantic-form-autocomplete-input>
+        <bs-alert>
+          <b>Place of birth (<code>wd:Q515</code>)</b>. This field use the lookup service. Type "Ulm" to test this field.
+        </bs-alert>
+        <semantic-form-autocomplete-input for='place'
+          value-binding-name="subject"
+          lookup-query='{
+              "type": "lookup",
+              "term": "Ulm",
+              "entityType": "http://www.wikidata.org/entity/Q515",
+              "limit": 5
+            }'
+        ></semantic-form-autocomplete-input>
+        <button name="submit" class="btn btn-default">Save</button>
+        <button name="reset" class="btn btn-default">Reset</button>
+        </bs-panel>
+    </semantic-form>
+    ]]>
+    </mp-code-example>
+
+    <h3>Semantic-simple-search (SparqlQuery)</h3>
+    <mp-code-example>
+      <![CDATA[
+      <semantic-simple-search
+        query='{
+          "type": "sparql",
+          "query": "PREFIX wd: <http://www.wikidata.org/entity/>
+            PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+            SELECT ?resource ?label WHERE {
+              VALUES(?resource ?label) {
+                (<http://www.wikidata.org/entity/Q937> \"Albert Einstein\")
+                (<http://www.wikidata.org/entity/Q88665> \"Hermann Einstein\")
+              }
+              FILTER(REGEX(STR(?label), ?__token__, \"i\"))
+            } LIMIT 2",
+          "params": {
+              "__token__": {
+              "type": "token",
+              "required": true,
+              "escapeLuceneSyntax": true,
+              "tokenizeLuceneQuery": true
+            }
+          }
+        }'
+        template='<span style="color: blue;" title="{{resource.value}}">{{label.value}}</span>'
+        input-placeholder='Search for something e.g. "Hermann"'
+      ></semantic-simple-search>
+      ]]>
+    </mp-code-example>
+
+    <h3>Semantic-simple-search (LookupQuery)</h3>
+    <bs-alert>
+      <b>Search for human (<code>wd:Q5</code>)</b> LookupQuery is used here. Type "Albert Einstein" to test this component.
+    </bs-alert>
+    <mp-code-example>
+    <![CDATA[
+      <semantic-simple-search
+        resource-binding-name="subject"
+        query='{
+          "type": "lookup",
+          "defaultTerm": "Albert Einstein",
+          "entityType": "http://www.wikidata.org/entity/Q5",
+          "limit": 3
+        }'
+        template='<span style="color: blue;" title="{{resource.value}}({{typeLabel.value}})">{{label.value}} ({{typeLabel.value}}, score: {{score.value}})</span>'
+        input-placeholder='Search for something e.g. "Albert Einstein"'
+      ></semantic-simple-search>
+    ]]>
+    </mp-code-example>
+
+    <h3>resource-selector (structured search)</h3>
+    <semantic-search categories='{
+      "<http://www.w3.org/2001/XMLSchema#Decimal>": [{
+        "kind": "numeric-range",
+        "queryPattern": "{
+          $subject ?__relation__ ?literal .
+          FILTER(?literal >= ?__numericRangeBeginValue__) .
+          FILTER(?literal <= ?__numericRangeEndValue__) .
+        }"
+      }],
+      "<http://www.w3.org/2001/XMLSchema#date>": [{
+        "kind": "date-range",
+        "datatype": "http://www.w3.org/2001/XMLSchema#date",
+        "queryPattern": "
+          {
+            $subject ?__relation__ ?date .
+            FILTER(?date <= ?__dateEndValue__) .
+            FILTER(?date >= ?__dateBeginValue__) .
+          }"
+        }]
+      }'
+      relations='{
+        "<http://www.metaphacts.com/ontology/sample/fan_of>": [
+          {
+            "kind": "resource",
+            "queryPattern": "
+            {
+              $subject <http://xmlns.com/foaf/0.1/topic_interest>/<http://purl.org/dc/terms/creator> ?__value__ .
+            }
+            "
+          }
+        ],
+        "<http://xmlns.com/foaf/0.1/topic_interest>": [
+          {
+            "kind": "text"
+          }
+        ]
+      }'
+      search-profile='{
+          "categories": [{
+              "iri": "<http://xmlns.com/foaf/0.1/Person>",
+              "label": "Person",
+              "thumbnail": "../images/help/thenounproject/noun_1113333.svg"
+            },
+            {
+              "iri": "<http://dbpedia.org/ontology/Artwork>",
+              "label": "Artwork",
+              "thumbnail": "../images/help/thenounproject/noun_1285331.svg"
+            },
+            {
+              "iri": "<http://www.w3.org/2001/XMLSchema#Decimal>",
+              "label": "Height",
+              "thumbnail": "../images/help/thenounproject/noun_739855.svg"
+            },
+            {
+              "iri": "<http://www.w3.org/2001/XMLSchema#date>",
+              "label": "Time",
+              "thumbnail": "../images/help/thenounproject/noun_873049.svg"
+            }
+          ],
+          "relations": [{
+              "iri": "<http://xmlns.com/foaf/0.1/knows>",
+              "label": "knows",
+              "hasDomain": "<http://xmlns.com/foaf/0.1/Person>",
+              "hasRange": "<http://xmlns.com/foaf/0.1/Person>"
+            },
+            {
+              "iri": "<http://xmlns.com/foaf/0.1/topic_interest>",
+              "label": "interested in",
+              "hasDomain": "<http://xmlns.com/foaf/0.1/Person>",
+              "hasRange": "<http://dbpedia.org/ontology/Artwork>"
+            },
+            {
+              "iri": "<http://www.metaphacts.com/ontology/sample/fan_of>",
+              "label": "fan of",
+              "hasDomain": "<http://xmlns.com/foaf/0.1/Person>",
+              "hasRange": "<http://xmlns.com/foaf/0.1/Person>"
+            },
+            {
+              "iri": "<http://schema.org/birthDate>",
+              "label": "birth date",
+              "hasDomain": "<http://xmlns.com/foaf/0.1/Person>",
+              "hasRange": "<http://www.w3.org/2001/XMLSchema#date>"
+            },
+            {
+              "iri": "<http://dbpedia.org/ontology/height>",
+              "label": "height",
+              "hasDomain": "<http://xmlns.com/foaf/0.1/Person>",
+              "hasRange": "<http://www.w3.org/2001/XMLSchema#Decimal>"
+            }
+          ]
+        }'>
+        <semantic-search-query-builder resource-selector-relations='{
+            "<http://xmlns.com/foaf/0.1/topic_interest>": {
+                "query": {
+                    "type": "lookup",
+                    "term": "__token__",
+                    "entityType": "http://www.wikidata.org/entity/Q838948",
+                    "limit": 3
+                },
+                "suggestionVariable": "subject",
+                "suggestionTupleTemplate": "<span title=\"{{resource.value}}({{typeLabel.value}})\">{{label.value}} ({{typeLabel.value}}, score: {{score.value}})</span>"
+            }
+        }'>
+        </semantic-search-query-builder>
+        <div data-flex-layout="row stretch-stretch">
+            <div data-flex-self="size-1of3" style="flex: 0 0 20px;">
+                <semantic-search-facet></semantic-search-facet>
+            </div>
+            <semantic-search-result-holder>
+                <div data-flex-self="md-full">
+                    <semantic-search-result>
+                        <mp-sparql-result-counts id='query-count' query="SELECT DISTINCT * {}" template='{{#if hasLimit}} <bs-alert bs-style="warning">
+                                  Showing {{numberOfResults}} of {{totalNumberOfResults}} matches. <strong>Please, refine your search.</strong> </bs-alert>
+                                  {{else}}<span> found {{numberOfResults}} matches </span>{{/if}}'>
+                        </mp-sparql-result-counts>
+                    </semantic-search-result>
+                    <bs-tabs unmount-on-exit=true id='search-results' animation=false>
+                        <bs-tab event-key="1" title="Grid">
+                            <bs-alert bs-style="info"> Only entities with image representation are shown in the Grid!
+                            </bs-alert>
+                            <semantic-search-result>
+                                <semantic-table id='grid-result' query='
+                      PREFIX schema: <http://schema.org/>
+
+                      SELECT DISTINCT ?subject ?thumbnail WHERE {
+                        OPTIONAL { ?subject schema:thumbnail ?image  }
+
+                        BIND(
+                          REPLACE(
+                            COALESCE(
+                              STR(?image),
+                              "//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/200px-No_image_available.svg.png"
+                            ),
+                            "http://", "//"
+                          ) as ?thumbnail
+                        ).
+                      }' tuple-template='{{>tupleTemplate}}' options='{"showFilter":false, "resultsPerPage":16}'>
+                                    <template id='tupleTemplate'>
+                                        <div class="rs-grid-element text-center panel panel-default">
+                                            <div class="panel-body">
+                                                <img src="{{thumbnail.value}}" style="height:120px;max-width:150px;"
+                                                    class="img-rounded">
+                                            </div>
+                                            <div class="panel-footer" style="position: relative">
+                                                <semantic-link class="grid-resource-link" iri="{{subject.value}}">
+                                                </semantic-link>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </semantic-table>
+                            </semantic-search-result>
+                        </bs-tab>
+                        <bs-tab event-key="2" title="Table">
+                            <semantic-search-result>
+                                <semantic-table id='table-result' query='SELECT DISTINCT ?subject WHERE { }'
+                                    options='{"showFilter":false, "resultsPerPage":10}'>
+                                </semantic-table>
+                            </semantic-search-result>
+                        </bs-tab>
+                        <bs-tab event-key="4" title="Carousel">
+                            <semantic-search-result>
+                                <semantic-carousel id='carousel-result' query='
+                        PREFIX schema: <http://schema.org/>
+
+                        SELECT DISTINCT ?subject ?thumbnail WHERE {
+                          OPTIONAL { ?subject schema:thumbnail ?image  }
+                          BIND(
+                            REPLACE(
+                              COALESCE(
+                                STR(?image),
+                                "//upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/200px-No_image_available.svg.png"
+                              ),
+                              "http://", "//"
+                            ) as ?thumbnail
+                          ).
+                        }' tuple-template='{{> tupleTemplate}}' options='{"centerMode":true, "dots":false}'>
+                                    <template id='tupleTemplate'>
+                                        <div class="text-center panel panel-default"
+                                            style="border:none;margin-right:20px;font-size:12px;height:300px;width: 100%;">
+                                            <div class="panel-body" style="height: 280px;">
+                                                <img src="{{thumbnail.value}}" style="max-height:260px; margin: 0 auto;"
+                                                    class="img-rounded">
+                                            </div>
+                                            <div class="panel-footer" style="position: relative;  border: none;">
+                                                <semantic-link class="grid-resource-link" iri="{{subject.value}}">
+                                                </semantic-link>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                </semantic-carousel>
+                            </semantic-search-result>
+                        </bs-tab>
+                    </bs-tabs>
+
+                    <bs-panel>
+                        <semantic-search-result>
+                            <mp-sparql-download id='csv-download' query="SELECT * WHERE { }" header="text/csv"
+                                filename="csv-result.csv">
+                                <button class="btn btn-default">Download CSV</button>
+                            </mp-sparql-download>
+                        </semantic-search-result>
+                        <semantic-search-result>
+                            <mp-sparql-download id='json-download' query="SELECT * WHERE { }"
+                                header="application/sparql-results+json" filename="json-result.json">
+                                <button class="btn btn-default">Download JSON</button>
+                            </mp-sparql-download>
+                        </semantic-search-result>
+                    </bs-panel>
+                </div>
+            </semantic-search-result-holder>
+        </div>
+    </semantic-search>
+  </div>
+</div>
