@@ -1,0 +1,17 @@
+<div style="margin-top:10%;">
+  <div data-flex-layout="column center-center">
+    <div>
+      <h1>Welcome to RDS-demo</h1>
+      [[!-- This template is uses next parameters set: 'localSourcesOnly' --]]
+      <semantic-simple-search
+        resource-binding-name="subject"
+        query='{
+          "type": "lookup",
+          "limit": 60
+        }'
+        template='[[> mpp:LookupCandidateTemplate]]'
+        input-placeholder='Search for entities'>
+      </semantic-simple-search>
+    </div>
+  </div>
+</div>

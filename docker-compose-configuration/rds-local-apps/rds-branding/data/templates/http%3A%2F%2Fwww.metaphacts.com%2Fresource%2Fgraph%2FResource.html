@@ -1,0 +1,69 @@
+[[> "http://www.metaphacts.com/resource/OntodiaResourceUserTemplates" ]]
+
+<style>
+  .ontodia-container {
+    flex: auto;
+    display: flex;
+    height: 100%;
+    min-height:500px;
+    width: 100%;
+  }
+
+  .ontodia-workspace-container {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .ontodia-knowledge-panel-container {
+    background-color: whitesmoke;
+    padding: 10px 0 0px 10px;
+    max-width: 30%;
+    z-index: 1;
+  }
+
+  .ontodia-knowledge-panel-container .knowledge-panel-frame {
+    box-shadow: 0px -5px 13px 5px rgba(0, 0, 0, 0.12);
+    height: calc(100% - 10px);
+    transition: height 0.3s;
+    overflow: hidden;
+    margin-left: 0;
+    width: 380px;
+    max-width: 100%;
+  }
+  .knowledge-panel-frame .DataTable--global-filter-container {
+    width: 100%
+  }
+</style>
+
+<div class="page page--fullheight">
+  <div class='ontodia-container'>
+    <div class='ontodia-knowledge-panel-container'>
+      <mp-event-proxy
+        id='proxy-selection'
+        on-event-type='Ontodia.ShowElementInfo'
+        proxy-event-type='KnowledgePanel.Open'
+        proxy-targets='[]'>
+      </mp-event-proxy>
+      <semantic-context repository='default'>
+        <mp-knowledge-panel-frame no-pin=true></mp-knowledge-panel-frame>
+      </semantic-context>
+    </div>
+    <div class='ontodia-workspace-container'>
+      <ontodia
+        id='ontodia'
+        hide-navigation-confirmation=true
+        iri='[[this]]'
+        [[> "http://www.metaphacts.com/resource/assets/OntodiaGlobalSettings" ]]
+        [[> OntodiaClassAndLinksCustomization ]]>
+        <ontodia-data-providers>
+          [[> "http://www.metaphacts.com/resource/OntodiaUserDataProvider" ]]
+        </ontodia-data-providers>
+        [[#if (hasPermission "api:ldp:container:<http://www.metaphacts.com/ontologies/platform#ontodiaDiagramContainer>:update:any")]]
+          [[> "http://www.metaphacts.com/resource/OntodiaSimpleWorkspace" expectsSmallDiagram=true]]
+        [[else]]
+          [[> "http://www.metaphacts.com/resource/OntodiaSimpleWorkspace" readonly=true expectsSmallDiagram=true]]
+        [[/if]]
+      </ontodia>
+    </div>
+  </div>
+</div>

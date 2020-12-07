@@ -1,0 +1,6 @@
+<div>
+  <div title="{{subject.value}}">
+    {{label.value}}<span>{{#if type}} | type: <b>{{#if typeLabel}}{{typeLabel.value}}{{else}}{{type.value}}{{/if}}</b>{{/if}}</span>{{#if score}}<span> | score: {{score.value}}</span>{{/if}}{{#if datasetId}}<span> | dataset: {{#if datasetLabel}}{{datasetLabel.value}}{{else}}{{datasetId.value}}{{/if}}</span>{{/if}}
+  </div>
+  {{#if description}}<div><i>Description: {{description.value}}</i></div>{{/if}}
+</div>

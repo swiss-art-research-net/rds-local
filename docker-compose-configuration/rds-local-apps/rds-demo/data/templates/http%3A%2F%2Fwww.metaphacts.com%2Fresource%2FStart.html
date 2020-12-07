@@ -1,0 +1,146 @@
+<style>
+  .component-page-toolbar {
+    display: none;
+  }
+</style>
+<div style="margin-top:10%;">
+  <div data-flex-layout="column center-center">
+    <div>
+      <h1>Welcome to RDS project</h1>
+      [[!-- This template is uses next parameters set: 'localSourcesOnly' --]]
+      <semantic-search
+        limit=1000
+        relations='{
+          "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>": [{
+            "kind": "resource",
+            "queryPattern": "
+              FILTER EXISTS {
+                ?subject a ?__value__ .
+              }
+            "
+          }],
+          "<http://swissartresearch.net#tgraph>": [{
+            "kind": "resource",
+            "queryPattern": "
+              FILTER EXISTS {
+                GRAPH ?__value__ {
+                  ?subject ?p ?o .
+                }
+              }
+            "
+          }]
+        }'
+        
+        search-profile='{
+          "categories": [{
+            "iri": "<http://rds-pages.swissartresearch.net/Resource>",
+            "label": "Resource"
+          }, {
+            "iri": "<http://rds-pages.swissartresearch.net/Type>",
+            "label": "Type"
+          }, {
+            "iri": "<http://rds-pages.swissartresearch.net/Dataset>",
+            "label": "Dataset"
+          }],
+          "relations": [{
+            "iri": "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>",
+            "label": "Type",
+            "hasDomain": "<http://rds-pages.swissartresearch.net/Resource>",
+            "hasRange": "<http://rds-pages.swissartresearch.net/Type>"
+          }, {
+            "iri": "<http://swissartresearch.net#tgraph>",
+            "label": "Dataset",
+            "hasDomain": "<http://rds-pages.swissartresearch.net/Resource>",
+            "hasRange": "<http://rds-pages.swissartresearch.net/Dataset>"
+          }]
+        }'>
+        <semantic-search-query-keyword
+          domain='<http://rds-pages.swissartresearch.net/Resource>'
+          placeholder="Search for something"
+          query='
+            SELECT ?subject ?property ?graph ?label ?score WHERE {
+              {
+                ?subject a ?type.
+                GRAPH ?graph {
+                  ?subject ?property ?label .
+                }
+                FILTER ISLITERAL(?label) .
+                FILTER (?graph != <http://vocab.getty.edu/ulan/graph> && ?graph != <http://vocab.getty.edu/aat/graph>)
+              } UNION {
+                ?subject a ?type.
+                VALUES (?graph) {
+                  (<http://vocab.getty.edu/ulan/graph>)
+                  (<http://vocab.getty.edu/aat/graph>)
+                }
+                
+                GRAPH ?graph {
+                  ?subject ((gvp:prefLabelGVP | xl:prefLabel)/xl:literalForm) ?label .
+                }
+                BIND (gvp:prefLabelGVP as ?property)
+              }
+              SERVICE <http://www.bigdata.com/rdf/search#search> {
+                ?label <http://www.bigdata.com/rdf/search#search> ?__token__ ;
+                <http://www.bigdata.com/rdf/search#relevance> ?score ;
+                <http://www.bigdata.com/rdf/search#minRelevance> "0.1" ;
+                <http://www.bigdata.com/rdf/search#matchAllTerms> "true"  .
+              }
+            }
+          '
+        ></semantic-search-query-keyword>
+        <div data-flex-layout="row stretch-stretch" style='margin-top: 20px;'>
+          <div data-flex-self="size-1of3" style="flex: 0 0 20px;">
+            <semantic-search-facet value-relations='{
+              "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>": {
+                "kind": "resource",
+                "valuesQuery": "
+                  SELECT (?type as ?value) (COUNT(DISTINCT ?subject) AS ?count) WHERE {
+                  } GROUP BY ?type ORDER BY ?type
+                ",
+                "tupleTemplate": "<span><semantic-context repository=\"assets\"><mp-label iri=\"{{value.value}}\" highlight=\"{{highlight}}\"></mp-label></semantic-context> ({{count.value}})</span>"
+              },
+              "<http://swissartresearch.net#tgraph>": {
+                "kind": "resource",
+                "valuesQuery": "
+                  SELECT (?graph as ?value) (COUNT(DISTINCT ?subject) AS ?count) WHERE {
+                  } GROUP BY ?graph ORDER BY ?graph
+                ",
+                "tupleTemplate": "<span><semantic-context repository=\"assets\"><mp-label iri=\"{{value.value}}\" highlight=\"{{highlight}}\"></mp-label></semantic-context> ({{count.value}})</span>"
+              }
+            }'></semantic-search-facet>
+          </div>
+          <div style='max-width: 90vw'>
+          <semantic-search-result-holder>
+            <semantic-search-result>
+              <semantic-table
+                id='table'
+                options='{"showFilter": false}' 
+                query='SELECT ?subject ?property ?graph ?label ?score WHERE { } ORDER BY DESC(?score)'
+                column-configuration='[
+                  {"variableName": "subject", "displayName": "Resources"},
+                  {"variableName": "property", "displayName": "Found by property"},
+                  {"variableName": "label", "displayName": "key"},
+                  {"variableName": "graph", "displayName": "Dataset", "cellTemplate": "{{> graph-label}}"}
+                ]'
+                number-of-displayed-rows=10
+                no-result-template='No Resources found'>
+                <template id="graph-label">
+                  <semantic-link iri="{{graph.value}}"></semantic-link>
+                </template>
+              </semantic-table>
+            </semantic-search-result>
+          </semantic-search-result-holder>
+          </div>
+        </div>
+      </semantic-search>
+      <bs-panel header="Examples" collapsible="false">
+        <ul>
+            <li><semantic-link iri="[[resolvePrefix "Help:DataClientSimpleSearch"]]"></semantic-link></li>
+            <li><semantic-link iri="[[resolvePrefix "Help:DataClientStructuredSearch"]]"></semantic-link></li>
+            <li><semantic-link iri="[[resolvePrefix "Help:FormAutocompletionTest"]]"></semantic-link></li>
+            <li><semantic-link iri="[[resolvePrefix "Help:TypeMappingsTestPage"]]"></semantic-link></li>
+            
+        </ul>
+      </bs-panel>
+    </div>
+  </div>
+</div>
