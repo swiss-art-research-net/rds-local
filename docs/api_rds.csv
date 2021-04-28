@@ -1,17 +1,17 @@
 ﻿Parameter;Description;parameter details;Examples
-"""query""";A string to search for. Required.;"query: ""string""";"https://rds-mph.swissartresearch.net/rest/reconciliation?queries={""q0"":{""query"":""Meinheim""}}"
+"""query""";A string to search for. Required.;"query: ""string""";"https://rds-global.swissartresearch.net/rest/reconciliation?queries={""q0"":{""query"":""Meinheim""}}"
 """limit""";An integer to specify how many results to return. Optional.;"query: ""string"" 
-limit: ""number of results the query should display""";"https://rds-mph.swissartresearch.net/rest/reconciliation?queries={""q0"":{""query"":""Meinheim"", ""limit"":3}}"
+limit: ""number of results the query should display""";"https://rds-global.swissartresearch.net/rest/reconciliation?queries={""q0"":{""query"":""Meinheim"", ""limit"":3}}"
 """type""";"A single string, or an array of strings, specifying the types of result e.g., person, product, ... The actual format of each type depends on the service (e.g., ""Q515"" as a Wikidata type). Optional. 
 (Currently we treat this parameter as rdf:typeproperty value)";"query: ""string"" 
-type: ""instance of rdf:type to be retrieved""";https://rds-mph.swissartresearch.net/rest/reconciliation?queries=%7B%22q0%22%3A%7B%22query%22%3A%22Meinheim%22%2C%22type%22%3A%22http%3A%2F%2Fwww.geonames.org%2Fontology%23Feature%22%7D%7D&callback=alert
+type: ""instance of rdf:type to be retrieved""";https://rds-global.swissartresearch.net/rest/reconciliation?queries=%7B%22q0%22%3A%7B%22query%22%3A%22Meinheim%22%2C%22type%22%3A%22http%3A%2F%2Fwww.geonames.org%2Fontology%23Feature%22%7D%7D&callback=alert
 """type_strict""";"A string, one of ""any"", ""all"", ""should"". Optional.";"type_strict: ""additional properties to be used for retrieving value""?
 any: the target candidate should have any or none of provided properties
 all: the target candidate should have all of provided properties
-should: the target candidate should have one of provided properties";https://rds-mph.swissartresearch.net/rest/reconciliation?queries=%7B%22q0%22%3A%7B%22query%22%3A%22Shakarla%22%2C%22type%22%3A%22http%3A%2F%2Fwww.geonames.org%2Fontology%23Feature%22%2C%22type_strict%22%3A%22any%22%2C%22properties%22%3A%5B%7B%22pid%22%3A%20%22http%3A%2F%2Fwww.geonames.org%2Fontology%23countryCode%22%2C%22v%22%3A%20%22RU%22%7D%2C%20%7B%22pid%22%3A%20%22http%3A%2F%2Fwww.geonames.org%2Fontology%23officialName%22%2C%22v%22%3A%20%22Sjakarla%22%7D%5D%7D%7D&callback=alert
+should: the target candidate should have one of provided properties";https://rds-global.swissartresearch.net/rest/reconciliation?queries=%7B%22q0%22%3A%7B%22query%22%3A%22Shakarla%22%2C%22type%22%3A%22http%3A%2F%2Fwww.geonames.org%2Fontology%23Feature%22%2C%22type_strict%22%3A%22any%22%2C%22properties%22%3A%5B%7B%22pid%22%3A%20%22http%3A%2F%2Fwww.geonames.org%2Fontology%23countryCode%22%2C%22v%22%3A%20%22RU%22%7D%2C%20%7B%22pid%22%3A%20%22http%3A%2F%2Fwww.geonames.org%2Fontology%23officialName%22%2C%22v%22%3A%20%22Sjakarla%22%7D%5D%7D%7D&callback=alert
 """properties""";"Array of json object literals or links. Optional. Properties can be one of two types:
 literal property: {pid: string, v: string}
 or
-object property: {pid: string, v: {id: string}} - where id: is IRI currently";Additional properties to be used when retrieving values. How is that different from the one above? ;https://rds-mph.swissartresearch.net/rest/reconciliation?queries=%7B%22q0%22%3A%7B%22query%22%3A%22Shakarla%22%2C%22type%22%3A%22http%3A%2F%2Fwww.geonames.org%2Fontology%23Feature%22%2C%22properties%22%3A%5B%7B%22pid%22%3A%20%22http%3A%2F%2Fwww.geonames.org%2Fontology%23countryCode%22%2C%22v%22%3A%20%22RU%22%7D%2C%20%7B%22pid%22%3A%20%22http%3A%2F%2Fwww.geonames.org%2Fontology%23officialName%22%2C%22v%22%3A%20%22Sjakarla%22%7D%5D%7D%7D
+object property: {pid: string, v: {id: string}} - where id: is IRI currently";Additional properties to be used when retrieving values. How is that different from the one above? ;https://rds-global.swissartresearch.net/rest/reconciliation?queries=%7B%22q0%22%3A%7B%22query%22%3A%22Shakarla%22%2C%22type%22%3A%22http%3A%2F%2Fwww.geonames.org%2Fontology%23Feature%22%2C%22properties%22%3A%5B%7B%22pid%22%3A%20%22http%3A%2F%2Fwww.geonames.org%2Fontology%23countryCode%22%2C%22v%22%3A%20%22RU%22%7D%2C%20%7B%22pid%22%3A%20%22http%3A%2F%2Fwww.geonames.org%2Fontology%23officialName%22%2C%22v%22%3A%20%22Sjakarla%22%7D%5D%7D%7D
 ;;;
 ;;;

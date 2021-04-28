@@ -1,0 +1,7 @@
+version: "2.2"
+services:
+  platform:
+    mem_limit: 1g
+    mem_reservation: 1g
+#    volumes:
+#      - ./my-app:/apps/my-app

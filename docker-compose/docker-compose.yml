@@ -2,7 +2,8 @@ version: "2.2"
 services:
   platform:
     ports:
-      - "10214:8080"
+      - "8080:8080"
+      - "8443:8443"
     depends_on:
       - blazegraph
     container_name: "${COMPOSE_PROJECT_NAME}-metaphacts-platform"

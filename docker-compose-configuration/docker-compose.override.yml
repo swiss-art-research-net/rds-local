@@ -1,7 +1,0 @@
-version: "2.2"
-services:
-  platform:
-    volumes:
-      - ./rds-local-apps/rds-local:/apps/rds-local
-      - ./rds-local-apps/rds-branding:/apps/rds-branding
-      - ./rds-local-apps/rds-demo:/apps/rds-demo
