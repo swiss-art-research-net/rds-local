@@ -126,3 +126,26 @@ curl --location --request POST 'https://rds-qa.swissartresearch.net/rest/reconci
 ```bash
 curl --location --request POST 'https://rds-qa.swissartresearch.net/rest/reconciliation' --header 'Content-Type: application/json' --header 'Accept: application/json' --data-urlencode 'queries={"q2":{"query":"Car","limit":3},"q3":{"query":"Home","limit":3},"q0":{"query":"Meinheim","limit":3}}'
 ```
+## Label Service
+Label service is a central service of the platform which maps labels to resources by their iris. (This service can be configured using preferredLabels configuration in the UI props)
+
+To get labels for your resources use following endpoint:
+
+POST: `{RDS-L/RDS-G}/rest/data/rdf/utils/getLabelsForRdfValue` - where the set of resource IRIs should be provide as JSON-array in the body of the POST request.
+
+Example:
+```
+curl --location --request POST 'https://rds-mph.swissartresearch.net/rest/data/rdf/utils/getDescriptionForRdfValue' -
+-header 'Accept: application/json' --header 'Content-Type: application/json' --data-raw '["http://example.com/resource-iri"]'
+```
+
+## Description Service
+Description service is very similar to the label service. It maps descriptions to resources by their iris. (This service can be configured using preferredDescription configuration in the UI props)
+
+To get descriptions for your resources use following endpoint:
+
+POST: `{RDS-L/RDS-G}/rest/data/rdf/utils/getDescriptionForRdfValue` - where the set of resource IRIs should be provide as array in the body of POST request.
+Example:
+```
+curl --location --request POST 'https://rds-global.swissartresearch.net:443/rest/data/rdf/utils/getDescriptionForRdfValue'  --header 'Content-Type: application/json' --data-raw '["http://example.com/resource-iri"]'
+```
