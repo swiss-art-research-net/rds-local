@@ -1,0 +1,189 @@
+@prefix geo:   <http://www.opengis.net/ont/geosparql#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml:   <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix crm:   <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix aat: <http://vocab.getty.edu/aat/> .
+@prefix wd:    <http://www.wikidata.org/entity/> .
+@prefix wd: <http://www.wikidata.org/entity/> . 
+@prefix wds: <http://www.wikidata.org/entity/statement/> .
+@prefix wdv: <http://www.wikidata.org/value/> . 
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+@prefix gvp: <http://vocab.getty.edu/ontology#> .
+@prefix gnd: <https://d-nb.info/standards/elementset/gnd#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix gn: <http://www.geonames.org/ontology#> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix rds: <http://schema.swissartresearch.net/ontology/rds#> .
+
+
+
+
+# Person equivalences 
+
+rds:Person a rdfs:Class;
+    rdfs:label "Person"@en ;
+    rdfs:comment "person entity type expressed in RDS. The Person class is expressed as superclass of a series of classes from various ontology in the heritage domain"@en .
+
+
+crm:E21_Person rdfs:subClassOf rds:Person .
+gnd:Person rdfs:subClassOf rds:Person . #closeMatch is been used because the equivalence of the classes is partial. gnd:person includes as subclass also "characters" and "spirits" .
+gnd:UndifferentiatedPerson rdfs:subClassOf rds:Person .
+gvp:PersonConcept rdfs:subClassOf rds:Person .
+wd:Q215627 rdfs:subClassOf rds:Person . # person
+wd:Q154954 rdfs:subClassOf rds:Person . #natural person in wikidata
+wd:Q1415187 rdfs:subClassOf rds:Person . #economic agent in wikidata
+gvp:UnknownPersonConcept rdfs:subClassOf rds:Person .
+gnd:DifferentiatedPerson rdfs:subClassOf rds:Person .
+
+
+crm:E21_Person rdf:type rdfs:Class ;
+    owl:equivalentClass gnd:Person ; 
+    owl:equivalentClass gnd:UndifferentiatedPerson ;
+    owl:equivalentClass gvp:PersonConcept ;
+    owl:equivalentClass wd:Q215627 ; # person
+    owl:equivalentClass wd:Q154954 ;  #natural person in wikidata
+    owl:equivalentClass wd:Q1415187 ; #economic agent in wikidata
+    owl:equivalentClass gvp:UnknownPersonConcept ;
+    owl:equivalentClass gnd:DifferentiatedPerson .
+
+# Group equivalences 
+
+rds:Group a rdfs:Class;
+    rdfs:label "Group"@en ;
+    rdfs:comment "The group entity type expressed in RDS. The Group class is expressed as superclass of a series of classes from various ontology in the heritage domain"@en .
+
+gvp:GroupConcept rdfs:subClassOf rds:Group .
+wd:Q8436 rdfs:subClassOf rds:Group .
+gnd:CorporateBody rdfs:subClassOf rds:Group .
+wd:Q3778211 rdfs:subClassOf rds:Group .
+wd:Q6256 rdfs:subClassOf rds:Group .
+wd:Q16334295 rdfs:subClassOf rds:Group .
+wd:Q5946290 rdfs:subClassOf rds:Group .
+
+crm:E74_Group rdf:type rdfs:Class ;
+    owl:equivalentClass gvp:GroupConcept;
+    owl:equivalentClass wd:Q8436 ; # family -> Married couples and other concepts of family are regarded as particular examples of E74 Group.
+    owl:equivalentClass gnd:CorporateBody ;
+#    owl:equivalentClass wd:Q43229 ; #organzation in wd
+    owl:equivalentClass wd:Q3778211 ; #legal person
+    owl:equivalentClass wd:Q6256 ; # country -> Nationality can be modeled as membership in an E74 Group 
+    owl:equivalentClass wd:Q16334295 ; #g-roup of human. however it can include human not acting together, which is wrong in CRM. But they do not differentiate. Ex: Fouding fathers.
+    owl:equivalentClass wd:Q5946290 . # facilities but actually used also for groups
+
+
+# Built work equivalences
+
+
+rds:BuiltWork a owl:Class;
+    rdfs:label "Built Work"@en ;
+    rdfs:comment "The built work entity type expressed in RDS. The built work class is expressed as superclass of a series of classes from various ontology in the heritage domain"@en .
+
+
+              
+gnd:BuildingOrMemorial rdfs:subClassOf rds:BuiltWork .
+wd:Q17350442 rdfs:subClassOf rds:BuiltWork .
+wd:Q570116 rdfs:subClassOf rds:BuiltWork .
+wd:Q811979 rdfs:subClassOf rds:BuiltWork .
+rds:crmBuiltWork rdfs:subClassOf rds:BuiltWork .
+
+
+rds:crmBuiltWork rdf:type owl:Class ;
+    owl:equivalentClass gnd:BuildingOrMemorial ;
+    owl:equivalentClass wd:Q17350442 ;
+    owl:equivalentClass wd:Q570116 ; # tourist attractions
+    owl:equivalentClass wd:Q811979 ; # architectural structure
+    owl:equivalentClass [ a owl:Class ;
+                owl:intersectionOf (crm:E22_Man-Made_Object 
+                    [ a owl:Restriction ;
+                            owl:onProperty crm:P2_has_type ;
+                            owl:hasValue aat:300265418
+                          ])
+              ] .
+
+
+# Artwork equivalences => reviewed
+
+rds:Artwork a owl:Class;
+    rdfs:label "Artwork"@en ;
+    rdfs:comment "The works of art entity type expressed in RDS. The artwork class is expressed as superclass of a series of classes from various ontology in the heritage domain"@en .
+
+
+rds:crmArtwork rdf:type owl:Class ;
+      owl:equivalentClass
+            [ a owl:Class ;
+                owl:intersectionOf (crm:E22_Man-Made_Object 
+                    [ a owl:Restriction ;
+                        owl:onProperty crm:P2_has_type ;
+                        owl:hasValue aat:300133025
+                    ])
+            ] .
+
+
+rds:crmArtwork rdf:type rdfs:Class ;
+    owl:equivalentClass wd:Q18593264 ; #item in a collection
+    owl:equivalentClass wd:Q838948 . # work of art 
+
+wd:Q18593264 rdfs:subClassOf rds:Artwork .
+wd:Q838948 rdfs:subClassOf rds:Artwork .
+rds:crmArtwork rdfs:subClassOf rds:Artwork .
+
+# Bibliographic item equivalences 
+
+rds:BibliographicItem a rdfs:Class;
+    rdfs:label "Bibliographic Item"@en ;
+    rdfs:comment "A bibliographic item entity type expressed in RDS. The bibliographic item class is expressed as superclass of a series of classes from various ontology in the heritage domain"@en .
+
+gnd:Work rdfs:subClassOf rds:BibliographicItem .
+wd:Q2342494 rdfs:subClassOf rds:BibliographicItem .
+wd:Q732577 rdfs:subClassOf rds:BibliographicItem .
+wd:Q47461344 rdfs:subClassOf rds:BibliographicItem .
+frbroo:F24_Publication_Expression rdfs:subClassOf rds:BibliographicItem .
+
+frbroo:F24_Publication_Expression rdf:type rdfs:Class;
+    owl:equivalentClass wd:Q47461344 ; # written work
+    owl:equivalentClass wd:Q732577 ; # publication
+    owl:equivalentClass wd:Q2342494 ; #collectible 
+    owl:equivalentClass gnd:Work .
+
+# Event/Activity equivalences 
+
+
+rds:Event a rdfs:Class;
+    rdfs:label "Event"@en ;
+    rdfs:comment "An Event entity type expressed in RDS. The event class is expressed as superclass of a series of classes from various ontology in the heritage domain"@en .
+
+
+crm:E5_Event rdfs:subClassOf rds:Event .
+gnd:ConferenceOrEvent rdfs:subClassOf rds:Event .
+wd:Q1190554 rdfs:subClassOf rds:Event .
+
+crm:E5_Event rdf:type rdfs:Class ;
+    owl:equivalentClass gnd:ConferenceOrEvent ;
+    owl:equivalentClass wd:Q1190554 . # occurrence of a fact or object in space-time; instantiation of a property in an object; what can be experimented or registered by some observer
+
+
+# Place equivalences 
+
+rds:Place a rdfs:Class;
+    rdfs:label "Place"@en ;
+    rdfs:comment "A Place entity type expressed in RDS. The place class is expressed as superclass of a series of classes from various ontology in the heritage domain"@en .
+
+crm:E53_Place rdfs:subClassOf rds:Place .
+gnd:PlaceOrGeographicName rdfs:subClassOf rds:Place .
+wd:Q27096213 rdfs:subClassOf rds:Place .
+gvp:PhysPlaceConcept rdfs:subClassOf rds:Place .
+gvp:AdminPlaceConcept rdfs:subClassOf rds:Place .
+gvp:PhysAdminPlaceConcept rdfs:subClassOf rds:Place .
+gn:Feature rdfs:subClassOf rds:Place .
+
+crm:E53_Place rdf:type rdfs:Class ;
+    owl:equivalentClass gnd:PlaceOrGeographicName ; #subclass are not only places
+    owl:equivalentClass wd:Q27096213; #geographical entity
+    owl:equivalentClass gvp:PhysPlaceConcept ; #Physical feature, defined by its physical characteristics on planet Earth, including mountains, rivers, and oceans. Used in TGN only.
+    owl:equivalentClass gvp:AdminPlaceConcept ; #Place defined by administrative boundaries and conditions, including inhabited places, nations, and empires. Used in TGN only. 
+    owl:equivalentClass gvp:PhysAdminPlaceConcept ; #Place that is both administrative and physical. Rarely used. Used in TGN only.
+    owl:equivalentClass gn:Feature .

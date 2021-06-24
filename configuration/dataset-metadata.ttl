@@ -1,0 +1,14 @@
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+  <http://vocab.getty.edu/aat/graph> rdfs:label "aat" .
+  <http://vocab.getty.edu/aat/graph> <http://schema.org/thumbnail> "/assets/no_auth/getty-logo.png" .
+  <http://vocab.getty.edu/ulan/graph> rdfs:label "ulan" .
+  <http://vocab.getty.edu/ulan/graph> <http://schema.org/thumbnail> "/assets/no_auth/getty-logo.png" .
+  <https://d-nb.info/gnd/bibliographicdata/graph> rdfs:label "bibliographicdata" .
+  <https://d-nb.info/gnd/bibliographicdata/graph> <http://schema.org/thumbnail> "/assets/no_auth/gnd-logo.png" .
+  <https://d-nb.info/gnd/entityfacts/graph> rdfs:label "entity-facts" .
+  <https://d-nb.info/gnd/entityfacts/graph> <http://schema.org/thumbnail> "/assets/no_auth/dnb-logo.svg" .
+  <http://sws.geonames.org/graph> rdfs:label "geonames" .
+  <http://sws.geonames.org/graph> <http://schema.org/thumbnail> "/assets/no_auth/geonames-logo.png" .
+  <http://www.wikidata.org> rdfs:label "wikidata" .
+  <http://www.wikidata.org> <http://schema.org/thumbnail> "/assets/no_auth/wikidata-logo.png" .

@@ -1,0 +1,16 @@
+@prefix Platform: <http://www.metaphacts.com/ontologies/platform#>.
+@prefix User: <http://www.metaphacts.com/resource/user/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>.
+
+User:editor a Platform:User;
+      Platform:hasGroup <https://resources.swissartresearch.net/workflow/editor>.
+
+User:admin a Platform:User;
+      Platform:hasGroup <https://resources.swissartresearch.net/workflow/editor>.
+
+<https://resources.swissartresearch.net/workflow/editor> a foaf:Agent, crm:E39_Actor;
+      foaf:member User:editor;
+      foaf:member User:admin;
+      rdfs:label "Editor".
