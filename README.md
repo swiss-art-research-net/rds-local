@@ -18,6 +18,26 @@ First of all you should ensure that [docker](https://www.docker.com) and [docker
 1. Once the system is running you can access the platform using the url: [http://localhost:8080](http://localhost:8080) or [https://localhost:8443](https://localhost:8443).
 1. The default credentials are username `admin` and password `admin`. This can be changed by going to the settings menu (gear icon on the top-right) and from there to _Security_
 
+### Configuration
+
+Some additional configuration is recommended in order to use the full functionality of the platform. Example configurations are provided as `.ttl` files in the `/configuration` folder.
+
+1. Log in as Administrator and navigate to the Administration page by clicking on the cog wheel in the top right of the menu bar
+1. Click on _Data Import & Export_
+1. Upload the `dataset-metadata.ttl` file using the File Upload interface
+    * This will display additional information when searching through external datasets
+1. Click on _Advanced Options_ and enter the following URI in the field _URI of the target NamedGraph_: `http://schema.swissartresearch.net/rds/type-mapping`. Then upload the `type-mapping.ttl` file through the File Upload interface
+    * This will ensure the correct data types are used when searching for existing and newly created records
+
+If you intend to use your RDS-Local instance for data creation, perform the following steps. 
+
+1. Navigate to the _Administration_ page and access the _Security_ configuration.
+1. For editing records a user needs to have the `rds-editor` role. Click on the `admin` user to assign the role to this user.
+1. The form under the list will change to _Update Account_. Add the `rds-editor` to the list of roles and click _Update_.
+1. Add the `rds-editor` to any user that requires editing rights.
+1. Return to the _Administration_ page and navigate to the _Data Import & Export_ page.
+1. Upload the `user-roles.ttl` file.
+    * This defines the roles of individual users in the editing workflow.
 
 ### Operations
 
