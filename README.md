@@ -20,7 +20,7 @@ First of all you should ensure that [docker](https://www.docker.com) and [docker
 
 ### Configuration
 
-Some additional configuration is recommended in order to use the full functionality of the platform. Example configurations are provided as `.ttl` files in the `/configuration` folder.
+Some additional configuration is recommended in order to use the full functionality of the platform. Example configurations are provided as `.ttl` and `.trig` files in the `/configuration` folder.
 
 1. Log in as Administrator and navigate to the Administration page by clicking on the cog wheel in the top right of the menu bar
 1. Click on _Data Import & Export_
@@ -38,7 +38,9 @@ If you intend to use your RDS-Local instance for data creation, perform the foll
 1. Return to the _Administration_ page and navigate to the _Data Import & Export_ page.
 1. Upload the `user-roles.ttl` file.
     * This defines the roles of individual users in the editing workflow.
-
+1. Return to the _Administration_ page and navigate to the _LDP_ page.
+1. Click on _Import Container_ and use the file selector to upload the `rds-local-field-definitions.trig` file.
+1. Click on _Proceed_ to perform the upload
 ### Operations
 
 * To stop the platform you can execute the `docker-compose stop` command. 
