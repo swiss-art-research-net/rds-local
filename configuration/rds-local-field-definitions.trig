@@ -1,109 +1,109 @@
-@prefix tgn: <http://vocab.getty.edu/tgn/> .
-@prefix aat_scopeNote: <http://vocab.getty.edu/aat/scopeNote/> .
-@prefix bds: <http://www.bigdata.com/rdf/search#> .
-@prefix prov: <http://www.w3.org/ns/prov#> .
-@prefix tgn_term: <http://vocab.getty.edu/tgn/term/> .
-@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
-@prefix : <http://www.metaphacts.com/resource/> .
-@prefix luc: <http://www.ontotext.com/owlim/lucene#> .
-@prefix ulan_rel: <http://vocab.getty.edu/ulan/rel/> .
-@prefix vdpp: <http://data.lirmm.fr/ontologies/vdpp#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix bibo: <http://purl.org/ontology/bibo/> .
-@prefix ulan_scopeNote: <http://vocab.getty.edu/ulan/scopeNote/> .
-@prefix voag: <http://voag.linkedmodel.org/voag#> .
-@prefix sari: <http://w3id.org/sari/> .
-@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-@prefix aat_rel: <http://vocab.getty.edu/aat/rel/> .
-@prefix rso: <http://www.researchspace.org/ontology/> .
-@prefix sphRole: <http://sphaera.mpiwg-berlin.mpg.de/id/thes/role/> .
-@prefix dct: <http://purl.org/dc/terms/> .
-@prefix ulan_event: <http://vocab.getty.edu/ulan/event/> .
-@prefix wv: <http://vocab.org/waiver/terms/> .
-@prefix bio: <http://purl.org/vocab/bio/0.1/> .
-@prefix thesDimension: <http://collection.britishmuseum.org/id/thesauri/dimension/> .
-@prefix aat_source_rev: <http://vocab.getty.edu/aat/source/rev/> .
-@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
-@prefix Help: <http://help.metaphacts.com/resource/> .
-@prefix ulan_contrib: <http://vocab.getty.edu/ulan/contrib/> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix xl: <http://www.w3.org/2008/05/skos-xl#> .
-@prefix iso: <http://purl.org/iso25964/skos-thes#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix tgn_rev: <http://vocab.getty.edu/tgn/rev/> .
-@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
-@prefix tgn_contrib: <http://vocab.getty.edu/tgn/contrib/> .
-@prefix ulan_source: <http://vocab.getty.edu/ulan/source/> .
-@prefix rdsParts: <https://static.swissartresearch.net/partial/> .
-@prefix ulan_bio: <http://vocab.getty.edu/ulan/bio/> .
-@prefix rshelp: <http://researchspace.org/help/> .
-@prefix ecrm: <http://erlangen-crm.org/current/> .
-@prefix Assets: <http://www.metaphacts.com/resource/assets/> .
-@prefix Default: <https://static.swissartresearch.net/> .
-@prefix schema: <http://schema.org/> .
-@prefix geoliteral: <http://www.bigdata.com/rdf/geospatial/literals/v1#> .
-@prefix rsp: <http://www.researchspace.org/resource/> .
-@prefix vaem: <http://www.linkedmodel.org/schema/vaem#> .
-@prefix ptop: <http://www.ontotext.com/proton/protontop#> .
-@prefix efrbroo: <http://erlangen-crm.org/efrbroo/> .
-@prefix vann: <http://purl.org/vocab/vann/> .
-@prefix cc: <http://creativecommons.org/ns#> .
-@prefix rds: <http://schema.swissartresearch.net/ontology/rds#> .
-@prefix adms: <http://www.w3.org/ns/adms#> .
-@prefix tgn_source_rev: <http://vocab.getty.edu/tgn/source/rev/> .
-@prefix voaf: <http://purl.org/vocommons/voaf#> .
-@prefix rdsPages: <https://static.swissartresearch.net/page/> .
-@prefix dctype: <http://purl.org/dc/dcmitype/> .
-@prefix sphaera: <http://ontologies.mpiwg-berlin.mpg.de/sphaera/> .
-@prefix Repository: <http://www.metaphacts.com/ontologies/repository#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix rdsPlatform: <https://platform.swissartresearch.net/> .
-@prefix geo: <http://www.bigdata.com/rdf/geospatial#> .
-@prefix thesUnit: <http://collection.britishmuseum.org/id/thesauri/unit/> .
-@prefix fts: <http://www.bigdata.com/rdf/fts#> .
-@prefix thesIdentifier: <http://collection.britishmuseum.org/id/> .
-@prefix void: <http://rdfs.org/ns/void#> .
-@prefix workflow: <http://www.metaphacts.com/ontologies/platform/workflow#> .
-@prefix Platform: <http://www.metaphacts.com/ontologies/platform#> .
-@prefix rr: <http://www.w3.org/ns/r2rml#> .
-@prefix ldp: <http://www.w3.org/ns/ldp#> .
-@prefix tgn_scopeNote: <http://vocab.getty.edu/tgn/scopeNote/> .
-@prefix fmt: <http://www.w3.org/ns/formats/> .
-@prefix sesame: <http://www.openrdf.org/schema/sesame#> .
-@prefix lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#> .
-@prefix wdrs: <http://www.w3.org/2007/05/powder-s#> .
-@prefix Admin: <http://www.metaphacts.com/resource/admin/> .
-@prefix tgn_source: <http://vocab.getty.edu/tgn/source/> .
-@prefix dcat: <http://www.w3.org/ns/dcat#> .
-@prefix gvp_lang: <http://vocab.getty.edu/language/> .
-@prefix aat_contrib: <http://vocab.getty.edu/aat/contrib/> .
-@prefix graph-aat: <http://aat-explicit> .
-@prefix thes: <http://collection.britishmuseum.org/id/thesauri/> .
-@prefix crmdig: <http://www.ics.forth.gr/isl/CRMdig/> .
-@prefix aat_rev: <http://vocab.getty.edu/aat/rev/> .
-@prefix tgn_rel: <http://vocab.getty.edu/tgn/rel/> .
-@prefix frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
-@prefix User: <http://www.metaphacts.com/resource/user/> .
-@prefix crminf: <http://www.ics.forth.gr/isl/CRMinf/> .
-@prefix ulan: <http://vocab.getty.edu/ulan/> .
-@prefix gvp: <http://vocab.getty.edu/ontology#> .
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .
-@prefix sp: <http://spinrdf.org/sp#> .
-@prefix aat: <http://vocab.getty.edu/aat/> .
-@prefix ulan_source_rev: <http://vocab.getty.edu/ulan/source/rev/> .
-@prefix sh: <http://www.w3.org/ns/shacl#> .
-@prefix dc: <http://purl.org/dc/elements/1.1/> .
-@prefix bmo: <http://collection.britishmuseum.org/id/ontology/> .
-@prefix aat_term: <http://vocab.getty.edu/aat/term/> .
-@prefix freq: <http://purl.org/cld/freq/> .
-@prefix aat_source: <http://vocab.getty.edu/aat/source/> .
-@prefix sphType: <http://sphaera.mpiwg-berlin.mpg.de/id/thes/type/> .
-@prefix rrx: <http://purl.org/r2rml-ext/> .
-@prefix ulan_term: <http://vocab.getty.edu/ulan/term/> .
-@prefix ulan_rev: <http://vocab.getty.edu/ulan/rev/> .
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
-@prefix ontolex: <http://www.w3.org/ns/lemon/ontolex#> .
-@prefix ontogeo: <http://www.ontotext.com/owlim/geo#> .
+PREFIX tgn: <http://vocab.getty.edu/tgn/> 
+PREFIX aat_scopeNote: <http://vocab.getty.edu/aat/scopeNote/> 
+PREFIX bds: <http://www.bigdata.com/rdf/search#> 
+PREFIX prov: <http://www.w3.org/ns/prov#> 
+PREFIX tgn_term: <http://vocab.getty.edu/tgn/term/> 
+PREFIX sd: <http://www.w3.org/ns/sparql-service-description#> 
+PREFIX : <http://www.metaphacts.com/resource/> 
+PREFIX luc: <http://www.ontotext.com/owlim/lucene#> 
+PREFIX ulan_rel: <http://vocab.getty.edu/ulan/rel/> 
+PREFIX vdpp: <http://data.lirmm.fr/ontologies/vdpp#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX bibo: <http://purl.org/ontology/bibo/> 
+PREFIX ulan_scopeNote: <http://vocab.getty.edu/ulan/scopeNote/> 
+PREFIX voag: <http://voag.linkedmodel.org/voag#> 
+PREFIX sari: <http://w3id.org/sari/> 
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#> 
+PREFIX aat_rel: <http://vocab.getty.edu/aat/rel/> 
+PREFIX rso: <http://www.researchspace.org/ontology/> 
+PREFIX sphRole: <http://sphaera.mpiwg-berlin.mpg.de/id/thes/role/> 
+PREFIX dct: <http://purl.org/dc/terms/> 
+PREFIX ulan_event: <http://vocab.getty.edu/ulan/event/> 
+PREFIX wv: <http://vocab.org/waiver/terms/> 
+PREFIX bio: <http://purl.org/vocab/bio/0.1/> 
+PREFIX thesDimension: <http://collection.britishmuseum.org/id/thesauri/dimension/> 
+PREFIX aat_source_rev: <http://vocab.getty.edu/aat/source/rev/> 
+PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> 
+PREFIX Help: <http://help.metaphacts.com/resource/> 
+PREFIX ulan_contrib: <http://vocab.getty.edu/ulan/contrib/> 
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+PREFIX xl: <http://www.w3.org/2008/05/skos-xl#> 
+PREFIX iso: <http://purl.org/iso25964/skos-thes#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX tgn_rev: <http://vocab.getty.edu/tgn/rev/> 
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/> 
+PREFIX tgn_contrib: <http://vocab.getty.edu/tgn/contrib/> 
+PREFIX ulan_source: <http://vocab.getty.edu/ulan/source/> 
+PREFIX rdsParts: <https://static.swissartresearch.net/partial/> 
+PREFIX ulan_bio: <http://vocab.getty.edu/ulan/bio/> 
+PREFIX rshelp: <http://researchspace.org/help/> 
+PREFIX ecrm: <http://erlangen-crm.org/current/> 
+PREFIX Assets: <http://www.metaphacts.com/resource/assets/> 
+PREFIX Default: <https://static.swissartresearch.net/> 
+PREFIX schema: <http://schema.org/> 
+PREFIX geoliteral: <http://www.bigdata.com/rdf/geospatial/literals/v1#> 
+PREFIX rsp: <http://www.researchspace.org/resource/> 
+PREFIX vaem: <http://www.linkedmodel.org/schema/vaem#> 
+PREFIX ptop: <http://www.ontotext.com/proton/protontop#> 
+PREFIX efrbroo: <http://erlangen-crm.org/efrbroo/> 
+PREFIX vann: <http://purl.org/vocab/vann/> 
+PREFIX cc: <http://creativecommons.org/ns#> 
+PREFIX rds: <http://schema.swissartresearch.net/ontology/rds#> 
+PREFIX adms: <http://www.w3.org/ns/adms#> 
+PREFIX tgn_source_rev: <http://vocab.getty.edu/tgn/source/rev/> 
+PREFIX voaf: <http://purl.org/vocommons/voaf#> 
+PREFIX rdsPages: <https://static.swissartresearch.net/page/> 
+PREFIX dctype: <http://purl.org/dc/dcmitype/> 
+PREFIX sphaera: <http://ontologies.mpiwg-berlin.mpg.de/sphaera/> 
+PREFIX Repository: <http://www.metaphacts.com/ontologies/repository#> 
+PREFIX owl: <http://www.w3.org/2002/07/owl#> 
+PREFIX rdsPlatform: <https://platform.swissartresearch.net/> 
+PREFIX geo: <http://www.bigdata.com/rdf/geospatial#> 
+PREFIX thesUnit: <http://collection.britishmuseum.org/id/thesauri/unit/> 
+PREFIX fts: <http://www.bigdata.com/rdf/fts#> 
+PREFIX thesIdentifier: <http://collection.britishmuseum.org/id/> 
+PREFIX void: <http://rdfs.org/ns/void#> 
+PREFIX workflow: <http://www.metaphacts.com/ontologies/platform/workflow#> 
+PREFIX Platform: <http://www.metaphacts.com/ontologies/platform#> 
+PREFIX rr: <http://www.w3.org/ns/r2rml#> 
+PREFIX ldp: <http://www.w3.org/ns/ldp#> 
+PREFIX tgn_scopeNote: <http://vocab.getty.edu/tgn/scopeNote/> 
+PREFIX fmt: <http://www.w3.org/ns/formats/> 
+PREFIX sesame: <http://www.openrdf.org/schema/sesame#> 
+PREFIX lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#> 
+PREFIX wdrs: <http://www.w3.org/2007/05/powder-s#> 
+PREFIX Admin: <http://www.metaphacts.com/resource/admin/> 
+PREFIX tgn_source: <http://vocab.getty.edu/tgn/source/> 
+PREFIX dcat: <http://www.w3.org/ns/dcat#> 
+PREFIX gvp_lang: <http://vocab.getty.edu/language/> 
+PREFIX aat_contrib: <http://vocab.getty.edu/aat/contrib/> 
+PREFIX graph-aat: <http://aat-explicit> 
+PREFIX thes: <http://collection.britishmuseum.org/id/thesauri/> 
+PREFIX crmdig: <http://www.ics.forth.gr/isl/CRMdig/> 
+PREFIX aat_rev: <http://vocab.getty.edu/aat/rev/> 
+PREFIX tgn_rel: <http://vocab.getty.edu/tgn/rel/> 
+PREFIX frbr: <http://iflastandards.info/ns/fr/frbr/frbroo/> 
+PREFIX User: <http://www.metaphacts.com/resource/user/> 
+PREFIX crminf: <http://www.ics.forth.gr/isl/CRMinf/> 
+PREFIX ulan: <http://vocab.getty.edu/ulan/> 
+PREFIX gvp: <http://vocab.getty.edu/ontology#> 
+PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
+PREFIX sp: <http://spinrdf.org/sp#> 
+PREFIX aat: <http://vocab.getty.edu/aat/> 
+PREFIX ulan_source_rev: <http://vocab.getty.edu/ulan/source/rev/> 
+PREFIX sh: <http://www.w3.org/ns/shacl#> 
+PREFIX dc: <http://purl.org/dc/elements/1.1/> 
+PREFIX bmo: <http://collection.britishmuseum.org/id/ontology/> 
+PREFIX aat_term: <http://vocab.getty.edu/aat/term/> 
+PREFIX freq: <http://purl.org/cld/freq/> 
+PREFIX aat_source: <http://vocab.getty.edu/aat/source/> 
+PREFIX sphType: <http://sphaera.mpiwg-berlin.mpg.de/id/thes/type/> 
+PREFIX rrx: <http://purl.org/r2rml-ext/> 
+PREFIX ulan_term: <http://vocab.getty.edu/ulan/term/> 
+PREFIX ulan_rev: <http://vocab.getty.edu/ulan/rev/> 
+PREFIX vcard: <http://www.w3.org/2006/vcard/ns#> 
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#> 
+PREFIX ontogeo: <http://www.ontotext.com/owlim/geo#> 
 
 <http://www.metaphacts.com/ontologies/platform#fieldDefinitionContainer/context> {
   Platform:fieldDefinitionContainer a ldp:Container, prov:Entity, ldp:Resource;

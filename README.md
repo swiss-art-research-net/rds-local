@@ -38,9 +38,6 @@ If you intend to use your RDS-Local instance for data creation, perform the foll
 1. Return to the _Administration_ page and navigate to the _Data Import & Export_ page.
 1. Upload the `user-roles.ttl` file.
     * This defines the roles of individual users in the editing workflow.
-1. Return to the _Administration_ page and navigate to the _LDP_ page.
-1. Click on _Import Container_ and use the file selector to upload the `rds-local-field-definitions.trig` file.
-1. Click on _Proceed_ to perform the upload
 ### Operations
 
 * To stop the platform you can execute the `docker-compose stop` command. 
